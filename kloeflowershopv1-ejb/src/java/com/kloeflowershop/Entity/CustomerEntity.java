@@ -24,7 +24,7 @@ public class CustomerEntity implements Serializable {
     private String email;
     private String name;
     private Long primaryAddressID;
-    private Long mobileNumber;
+    private int mobileNumber;
     private String gender;
 
     /**
@@ -51,7 +51,7 @@ public class CustomerEntity implements Serializable {
      *
      * @return the value of mobileNumber
      */
-    public Long getMobileNumber() {
+    public int getMobileNumber() {
         return mobileNumber;
     }
 
@@ -60,7 +60,7 @@ public class CustomerEntity implements Serializable {
      *
      * @param mobileNumber new value of mobileNumber
      */
-    public void setMobileNumber(Long mobileNumber) {
+    public void setMobileNumber(int mobileNumber) {
         this.mobileNumber = mobileNumber;
     }
 
