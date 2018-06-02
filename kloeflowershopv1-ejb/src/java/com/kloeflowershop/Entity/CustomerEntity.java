@@ -26,6 +26,46 @@ public class CustomerEntity implements Serializable {
     private Long primaryAddressID;
     private int mobileNumber;
     private String gender;
+    private byte[] password;
+    private byte[] passwordSalt;
+
+    /**
+     * Get the value of passwordSalt
+     *
+     * @return the value of passwordSalt
+     */
+    public byte[] getPasswordSalt() {
+        return passwordSalt;
+    }
+
+    /**
+     * Set the value of passwordSalt
+     *
+     * @param passwordSalt new value of passwordSalt
+     */
+    public void setPasswordSalt(byte[] passwordSalt) {
+        this.passwordSalt = passwordSalt;
+    }
+
+
+    /**
+     * Get the value of password
+     *
+     * @return the value of password
+     */
+    public byte[] getPassword() {
+        return password;
+    }
+
+    /**
+     * Set the value of password
+     *
+     * @param password new value of password
+     */
+    public void setPassword(byte[] password) {
+        this.password = password;
+    }
+
 
     /**
      * Get the value of gender
