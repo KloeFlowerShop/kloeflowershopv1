@@ -5,6 +5,7 @@
  */
 package com.kloeflowershop.ManagedBeans;
 
+import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -14,7 +15,7 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean
 @SessionScoped
-public class ShoppingCartManagedBean {
+public class ShoppingCartManagedBean implements Serializable{
 
     /**
      * Creates a new instance of ShoppingCartManagedBean

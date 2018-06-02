@@ -6,14 +6,14 @@
 package com.kloeflowershop.ManagedBeans;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.NoneScoped;
 
 /**
  *
  * @author User
  */
 @ManagedBean
-@RequestScoped
+@NoneScoped
 public class NavigationManagedBean {
 
     /**
