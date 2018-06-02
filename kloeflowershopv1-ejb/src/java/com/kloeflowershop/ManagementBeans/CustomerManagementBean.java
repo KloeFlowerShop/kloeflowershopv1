@@ -77,11 +77,38 @@ public class CustomerManagementBean implements CustomerManagementBeanLocal {
             em.flush();
             return true;
         }
+        em.flush();
         return false;
     }
     
-    public boolean updateCustomer(String email, String name, Long primaryAddressId, 
-            int mobileNumber, String gender, String newPassword, String attemptedOldPassword) {
-        
+    public boolean updateCustomerInfo(String email, String name, Long primaryAddressId, 
+            int mobileNumber, String gender) {
+        customer.setEmail(email);
+        customer.setGender(gender);
+        customer.setId(primaryAddressId);
+        customer.setMobileNumber(mobileNumber);
+        customer.setName(name);
+        customer.setPrimaryAddressID(primaryAddressId);
+        em.merge(customer);
+        em.flush();
+        return true;
+    }
+    
+    public boolean updateCustomerPassword(String oldPasswordString, String newPasswordString) {
+        try {
+            if(pes.Authenticate(oldPasswordString, customer.getPassword(), customer.getPasswordSalt())) {
+                byte[] newPasswordSalt = pes.generateSalt();
+                byte[] newPassword = pes.getEncryptedPassword(newPasswordString, newPasswordSalt);
+                customer.setPassword(newPassword);
+                customer.setPasswordSalt(newPasswordSalt);
+                em.merge(customer);
+                em.flush();
+                return true;
+            }
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
+            Logger.getLogger(CustomerManagementBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        em.flush();
+        return false;
     }
 }

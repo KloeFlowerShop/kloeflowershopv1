@@ -5,6 +5,7 @@
  */
 package com.kloeflowershop.ManagementBeans;
 
+import com.kloeflowershop.Entity.CustomerEntity;
 import javax.ejb.Local;
 
 /**
@@ -13,5 +14,13 @@ import javax.ejb.Local;
  */
 @Local
 public interface CustomerManagementBeanLocal {
+    
+    public boolean loginCustomer(String email, String attemptedPassword);
+    public CustomerEntity validateLogin();
+    public boolean addCustomer(String email, String name, Long primaryAddressId, int mobileNumber, 
+            String gender, String passwordString);
+    public boolean updateCustomerInfo(String email, String name, Long primaryAddressId, 
+            int mobileNumber, String gender);
+    public boolean updateCustomerPassword(String oldPasswordString, String newPasswordString);
     
 }
