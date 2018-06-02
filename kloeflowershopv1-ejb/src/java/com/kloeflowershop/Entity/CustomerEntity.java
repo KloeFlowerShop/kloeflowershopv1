@@ -6,10 +6,14 @@
 package com.kloeflowershop.Entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -28,7 +32,29 @@ public class CustomerEntity implements Serializable {
     private String gender;
     private byte[] password;
     private byte[] passwordSalt;
+    
+    @OneToMany(cascade={CascadeType.ALL})
+    private List<AddressEntity> addressList = new ArrayList<AddressEntity>();
 
+    /**
+     * Get the value of addressList
+     *
+     * @return the value of addressList
+     */
+    public List<AddressEntity> getAddressList() {
+        return addressList;
+    }
+
+    /**
+     * Set the value of addressList
+     *
+     * @param addressList new value of addressList
+     */
+    public void setAddressList(List<AddressEntity> addressList) {
+        this.addressList = addressList;
+    }
+
+    
     /**
      * Get the value of passwordSalt
      *
