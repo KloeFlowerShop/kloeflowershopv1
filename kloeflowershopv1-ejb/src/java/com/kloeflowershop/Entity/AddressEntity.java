@@ -26,26 +26,6 @@ public class AddressEntity implements Serializable {
     private String city;
     private String streetName;
     private String extraDetails;
-    private String postalCode;
-
-    /**
-     * Get the value of postalCode
-     *
-     * @return the value of postalCode
-     */
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    /**
-     * Set the value of postalCode
-     *
-     * @param postalCode new value of postalCode
-     */
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-
 
     /**
      * Get the value of extraDetails
