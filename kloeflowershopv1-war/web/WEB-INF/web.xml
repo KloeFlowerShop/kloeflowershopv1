@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
-                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-                       xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
                             http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
-    <url-mapping id="home">
-        <pattern value="/home"></pattern>
-        <view-id value="/Home.xhtml"></view-id>
-    </url-mapping>
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
@@ -16,13 +12,9 @@
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    <servlet>
-        <servlet-name>home</servlet-name>
-        <jsp-file>/JSP/home.jsp</jsp-file>
-    </servlet>
     <servlet-mapping>
-        <servlet-name>servlet</servlet-name>
-        <url-pattern>/KLOEFlorist</url-pattern>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>/KLOEFlorist/*</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
@@ -30,6 +22,29 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>faces/index.xhtml</welcome-file>
+        <welcome-file>KLOEFlorist/Home.xhtml</welcome-file>
     </welcome-file-list>
+    
+    <listener>
+        <listener-class>org.ocpsoft.rewrite.servlet.impl.RewriteServletRequestListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>org.ocpsoft.rewrite.servlet.impl.RewriteServletContextListener</listener-class>
+    </listener>
+
+    <filter>
+        <filter-name>OCPsoft Rewrite Filter</filter-name>
+        <filter-class>org.ocpsoft.rewrite.servlet.RewriteFilter</filter-class>
+        <async-supported>true</async-supported>
+    </filter>
+    <filter-mapping>
+        <filter-name>OCPsoft Rewrite Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ASYNC</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
 </web-app>
