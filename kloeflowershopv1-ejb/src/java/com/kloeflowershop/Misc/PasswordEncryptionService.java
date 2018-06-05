@@ -15,7 +15,7 @@ import javax.crypto.spec.PBEKeySpec;
 
 /**
  *
- * @author User
+ * @author Terence
  */
 public class PasswordEncryptionService {
     

@@ -10,7 +10,7 @@ import javax.faces.bean.NoneScoped;
 
 /**
  *
- * @author User
+ * @author Terence
  */
 @ManagedBean
 @NoneScoped

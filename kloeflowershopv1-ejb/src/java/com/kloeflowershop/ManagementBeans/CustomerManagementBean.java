@@ -12,31 +12,32 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
  *
- * @author User
+ * @author Terence
  */
-@Stateful
-public class CustomerManagementBean implements CustomerManagementBeanLocal {
+@Stateless
+public class CustomerManagementBean implements CustomerManagementBeanLocal, CustomerManagementBeanRemote {
 
     @PersistenceContext
     EntityManager em;
-    
+
     CustomerEntity customer;
     PasswordEncryptionService pes = new PasswordEncryptionService();
-    
+
+    @Override
     public boolean loginCustomer(String email, String attemptedPassword) {
-        Query query = em.createQuery("SELECT c FROM CustomerEntity c WHERE c.email=:email AND c.password");
+        Query query = em.createQuery("SELECT c FROM CustomerEntity c WHERE c.email=:email");
         query.setParameter("email", email);
         List<CustomerEntity> customers = query.getResultList();
         for (CustomerEntity currCustomer : customers) {
             try {
-                if(pes.Authenticate(attemptedPassword, currCustomer.getPassword(), 
+                if (pes.Authenticate(attemptedPassword, currCustomer.getPassword(),
                         currCustomer.getPasswordSalt())) {
                     customer = currCustomer;
                 }
@@ -44,17 +45,14 @@ public class CustomerManagementBean implements CustomerManagementBeanLocal {
                 Logger.getLogger(CustomerManagementBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        if(customer != null) {
+        if (customer != null) {
             return true;
         }
         return false;
     }
-    
-    public CustomerEntity validateLogin() {
-        return customer;
-    }
-    
-    public boolean addCustomer(String email, String name, Long primaryAddressId, int mobileNumber, 
+
+    @Override
+    public boolean addCustomer(String email, String name, Long primaryAddressId, int mobileNumber,
             String gender, String passwordString) {
         customer = new CustomerEntity();
         customer.setEmail(email);
@@ -72,7 +70,7 @@ public class CustomerManagementBean implements CustomerManagementBeanLocal {
         }
         customer.setPasswordSalt(passwordSalt);
         customer.setPassword(password);
-        if(passwordSalt != null && password != null) {
+        if (passwordSalt != null && password != null) {
             em.persist(customer);
             em.flush();
             return true;
@@ -80,35 +78,64 @@ public class CustomerManagementBean implements CustomerManagementBeanLocal {
         em.flush();
         return false;
     }
-    
-    public boolean updateCustomerInfo(String email, String name, Long primaryAddressId, 
+
+    @Override
+    public boolean updateCustomerInfo(Long customerId, String email, String name, Long primaryAddressId,
             int mobileNumber, String gender) {
-        customer.setEmail(email);
-        customer.setGender(gender);
-        customer.setId(primaryAddressId);
-        customer.setMobileNumber(mobileNumber);
-        customer.setName(name);
-        customer.setPrimaryAddressID(primaryAddressId);
-        em.merge(customer);
-        em.flush();
-        return true;
+        customer = findCustomer(customerId);
+        if (customer != null) {
+            customer.setEmail(email);
+            customer.setGender(gender);
+            customer.setId(primaryAddressId);
+            customer.setMobileNumber(mobileNumber);
+            customer.setName(name);
+            customer.setPrimaryAddressID(primaryAddressId);
+            em.merge(customer);
+            em.flush();
+            return true;
+        }
+        return false;
     }
-    
-    public boolean updateCustomerPassword(String oldPasswordString, String newPasswordString) {
+
+    @Override
+    public boolean updateCustomerPassword(Long customerId, String oldPasswordString, String newPasswordString) {
         try {
-            if(pes.Authenticate(oldPasswordString, customer.getPassword(), customer.getPasswordSalt())) {
-                byte[] newPasswordSalt = pes.generateSalt();
-                byte[] newPassword = pes.getEncryptedPassword(newPasswordString, newPasswordSalt);
-                customer.setPassword(newPassword);
-                customer.setPasswordSalt(newPasswordSalt);
-                em.merge(customer);
-                em.flush();
-                return true;
+            if (findCustomer(customerId) != null) {
+                customer = findCustomer(customerId);
+                if (pes.Authenticate(oldPasswordString, customer.getPassword(), customer.getPasswordSalt())) {
+                    byte[] newPasswordSalt = pes.generateSalt();
+                    byte[] newPassword = pes.getEncryptedPassword(newPasswordString, newPasswordSalt);
+                    customer.setPassword(newPassword);
+                    customer.setPasswordSalt(newPasswordSalt);
+                    em.merge(customer);
+                    em.flush();
+                    return true;
+                }
             }
         } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
             Logger.getLogger(CustomerManagementBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         em.flush();
         return false;
+    }
+
+    @Override
+    public CustomerEntity getSingleCustomer(Long customerId) {
+        customer = findCustomer(customerId);
+        return customer;
+    }
+    
+    @Override
+    public List<CustomerEntity> getCustomerList() {
+        Query query = em.createQuery("SELECT * FROM CustomerEntity");
+        List<CustomerEntity> customerList = query.getResultList();
+        return customerList;
+    }
+
+    private CustomerEntity findCustomer(Long customerId) {
+        Query query = em.createQuery("SELECT c FROM CustomerEntity c WHERE c.id=:id");
+        query.setParameter("id", customerId);
+        customer = (CustomerEntity) query.getSingleResult();
+        return customer;
     }
 }

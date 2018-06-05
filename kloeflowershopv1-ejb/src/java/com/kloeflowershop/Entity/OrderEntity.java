@@ -22,7 +22,7 @@ import javax.persistence.OneToOne;
 
 /**
  *
- * @author User
+ * @author Terence
  */
 @Entity
 public class OrderEntity implements Serializable {

@@ -7,14 +7,12 @@ package com.kloeflowershop.ManagementBeans;
 
 import com.kloeflowershop.Entity.CustomerEntity;
 import java.util.List;
-import javax.ejb.Local;
 
 /**
  *
  * @author Terence
  */
-@Local
-public interface CustomerManagementBeanLocal {
+public interface CustomerManagementBeanRemote {
     
     public boolean loginCustomer(String email, String attemptedPassword);
     public boolean addCustomer(String email, String name, Long primaryAddressId, int mobileNumber, 

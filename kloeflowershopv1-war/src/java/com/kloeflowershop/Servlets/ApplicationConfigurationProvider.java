@@ -19,7 +19,7 @@ import org.ocpsoft.rewrite.servlet.config.Redirect;
 
 /**
  *
- * @author User
+ * @author Terence
  */
 @RewriteConfiguration
 public class ApplicationConfigurationProvider extends HttpConfigurationProvider

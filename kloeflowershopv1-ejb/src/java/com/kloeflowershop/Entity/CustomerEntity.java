@@ -17,7 +17,7 @@ import javax.persistence.OneToMany;
 
 /**
  *
- * @author User
+ * @author Terence
  */
 @Entity
 public class CustomerEntity implements Serializable {
