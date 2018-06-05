@@ -5,7 +5,10 @@
  */
 package com.kloeflowershop.ManagementBeans;
 
+import com.kloeflowershop.Entity.ProductEntity;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
@@ -13,6 +16,11 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class ProductManagementBean implements ProductManagementBeanLocal, ProductManagementRemoteBean {
+
+    @PersistenceContext
+    EntityManager em;
+    
+    ProductEntity product;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")

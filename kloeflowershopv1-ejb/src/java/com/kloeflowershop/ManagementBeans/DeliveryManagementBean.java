@@ -5,7 +5,10 @@
  */
 package com.kloeflowershop.ManagementBeans;
 
+import com.kloeflowershop.Entity.DeliveryEntity;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
@@ -13,6 +16,11 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class DeliveryManagementBean implements DeliveryManagementBeanLocal, DeliveryManagementBeanRemote {
+
+    @PersistenceContext
+    EntityManager em;
+    
+    DeliveryEntity delivery;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
