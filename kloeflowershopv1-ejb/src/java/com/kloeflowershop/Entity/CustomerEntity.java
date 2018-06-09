@@ -35,7 +35,29 @@ public class CustomerEntity implements Serializable {
     
     @OneToMany(cascade={CascadeType.ALL})
     private List<AddressEntity> addressList = new ArrayList<AddressEntity>();
+    @OneToMany(cascade = {CascadeType.ALL})
+    private List<SubscriptionEntity> subscriptions = new ArrayList<SubscriptionEntity>();
 
+
+    /**
+     * Get the value of subscriptions
+     *
+     * @return the value of subscriptions
+     */
+    public List<SubscriptionEntity> getSubscriptions() {
+        return subscriptions;
+    }
+
+    /**
+     * Set the value of subscriptions
+     *
+     * @param subscriptions new value of subscriptions
+     */
+    public void setSubscriptions(List<SubscriptionEntity> subscriptions) {
+        this.subscriptions = subscriptions;
+    }
+    
+    
     /**
      * Get the value of addressList
      *

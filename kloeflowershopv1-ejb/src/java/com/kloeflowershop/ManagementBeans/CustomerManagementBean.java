@@ -5,10 +5,14 @@
  */
 package com.kloeflowershop.ManagementBeans;
 
+import com.kloeflowershop.Entity.AddressEntity;
 import com.kloeflowershop.Entity.CustomerEntity;
+import com.kloeflowershop.Entity.ProductEntity;
+import com.kloeflowershop.Entity.SubscriptionEntity;
 import com.kloeflowershop.Misc.PasswordEncryptionService;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,13 +32,19 @@ public class CustomerManagementBean implements CustomerManagementBeanLocal, Cust
     EntityManager em;
 
     CustomerEntity customer;
+    List<CustomerEntity> customerList;
+    AddressEntity address;
+    List<AddressEntity> addressList;
+    SubscriptionEntity subscription;
+    List<SubscriptionEntity> subscriptions;
     PasswordEncryptionService pes = new PasswordEncryptionService();
 
     @Override
-    public boolean loginCustomer(String email, String attemptedPassword) {
+    public CustomerEntity loginCustomer(String email, String attemptedPassword) {
         Query query = em.createQuery("SELECT c FROM CustomerEntity c WHERE c.email=:email");
         query.setParameter("email", email);
         List<CustomerEntity> customers = query.getResultList();
+        customer = null;
         for (CustomerEntity currCustomer : customers) {
             try {
                 if (pes.Authenticate(attemptedPassword, currCustomer.getPassword(),
@@ -45,14 +55,11 @@ public class CustomerManagementBean implements CustomerManagementBeanLocal, Cust
                 Logger.getLogger(CustomerManagementBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        if (customer != null) {
-            return true;
-        }
-        return false;
+        return customer;
     }
 
     @Override
-    public boolean addCustomer(String email, String name, Long primaryAddressId, int mobileNumber,
+    public CustomerEntity addCustomer(String email, String name, Long primaryAddressId, int mobileNumber,
             String gender, String passwordString) {
         customer = new CustomerEntity();
         customer.setEmail(email);
@@ -70,47 +77,35 @@ public class CustomerManagementBean implements CustomerManagementBeanLocal, Cust
         }
         customer.setPasswordSalt(passwordSalt);
         customer.setPassword(password);
-        if (passwordSalt != null && password != null) {
-            em.persist(customer);
-            em.flush();
-            return true;
-        }
+        em.persist(customer);
         em.flush();
-        return false;
+        return customer;
     }
 
     @Override
-    public boolean updateCustomerInfo(Long customerId, String email, String name, Long primaryAddressId,
-            int mobileNumber, String gender) {
-        customer = findCustomer(customerId);
-        if (customer != null) {
-            customer.setEmail(email);
-            customer.setGender(gender);
-            customer.setId(primaryAddressId);
-            customer.setMobileNumber(mobileNumber);
-            customer.setName(name);
-            customer.setPrimaryAddressID(primaryAddressId);
-            em.merge(customer);
-            em.flush();
-            return true;
-        }
-        return false;
+    public CustomerEntity updateCustomerInfo(CustomerEntity customer, String email, String name, Long primaryAddressId, int mobileNumber, String gender) {
+        customer.setEmail(email);
+        customer.setGender(gender);
+        customer.setId(primaryAddressId);
+        customer.setMobileNumber(mobileNumber);
+        customer.setName(name);
+        customer.setPrimaryAddressID(primaryAddressId);
+        em.merge(customer);
+        em.flush();
+        return customer;
     }
 
     @Override
-    public boolean updateCustomerPassword(Long customerId, String oldPasswordString, String newPasswordString) {
+    public boolean updateCustomerPassword(CustomerEntity customer, String oldPasswordString, String newPasswordString) {
         try {
-            if (findCustomer(customerId) != null) {
-                customer = findCustomer(customerId);
-                if (pes.Authenticate(oldPasswordString, customer.getPassword(), customer.getPasswordSalt())) {
-                    byte[] newPasswordSalt = pes.generateSalt();
-                    byte[] newPassword = pes.getEncryptedPassword(newPasswordString, newPasswordSalt);
-                    customer.setPassword(newPassword);
-                    customer.setPasswordSalt(newPasswordSalt);
-                    em.merge(customer);
-                    em.flush();
-                    return true;
-                }
+            if (customer != null && pes.Authenticate(oldPasswordString, customer.getPassword(), customer.getPasswordSalt())) {
+                byte[] newPasswordSalt = pes.generateSalt();
+                byte[] newPassword = pes.getEncryptedPassword(newPasswordString, newPasswordSalt);
+                customer.setPassword(newPassword);
+                customer.setPasswordSalt(newPasswordSalt);
+                em.merge(customer);
+                em.flush();
+                return true;
             }
         } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
             Logger.getLogger(CustomerManagementBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -120,22 +115,112 @@ public class CustomerManagementBean implements CustomerManagementBeanLocal, Cust
     }
 
     @Override
-    public CustomerEntity getSingleCustomer(Long customerId) {
-        customer = findCustomer(customerId);
-        return customer;
-    }
-    
-    @Override
-    public List<CustomerEntity> getCustomerList() {
-        Query query = em.createQuery("SELECT * FROM CustomerEntity");
-        List<CustomerEntity> customerList = query.getResultList();
-        return customerList;
-    }
-
-    private CustomerEntity findCustomer(Long customerId) {
+    public CustomerEntity getCustomer(Long customerId) {
         Query query = em.createQuery("SELECT c FROM CustomerEntity c WHERE c.id=:id");
         query.setParameter("id", customerId);
         customer = (CustomerEntity) query.getSingleResult();
         return customer;
+    }
+
+    @Override
+    public List<CustomerEntity> getCustomerList() {
+        Query query = em.createQuery("SELECT * FROM CustomerEntity");
+        customerList = query.getResultList();
+        return customerList;
+    }
+
+    @Override
+    public List<AddressEntity> getAddressList(CustomerEntity customer) {
+        addressList = customer.getAddressList();
+        return addressList;
+    }
+
+    @Override
+    public AddressEntity getPrimaryAddress(CustomerEntity customer) {
+        Long primaryAddressId = customer.getPrimaryAddressID();
+        address = getAddress(primaryAddressId);
+        return address;
+    }
+
+    @Override
+    public AddressEntity getAddress(Long addressId) {
+        Query query = em.createQuery("SELECT a FROM AddressEntity a WHERE a.id=:id");
+        query.setParameter("id", addressId);
+        address = (AddressEntity) query.getSingleResult();
+        return address;
+    }
+
+    @Override
+    public AddressEntity addAddress(String country, String area, String city, String streetName, String extraDetails, boolean isPrimary, CustomerEntity customer) {
+        address = new AddressEntity();
+        address.setArea(area);
+        address.setCity(city);
+        address.setCountry(country);
+        address.setExtraDetails(extraDetails);
+        address.setStreetName(streetName);
+        addressList = customer.getAddressList();
+        addressList.add(address);
+        customer.setAddressList(addressList);
+        if (isPrimary) {
+            customer.setPrimaryAddressID(address.getId());
+        }
+        em.persist(address);
+        em.merge(customer);
+        em.flush();
+        return address;
+    }
+
+    @Override
+    public AddressEntity setPrimaryAddress(AddressEntity address, CustomerEntity customer) {
+        customer.setPrimaryAddressID(address.getId());
+        em.merge(customer);
+        em.flush();
+        return address;
+    }
+
+    @Override
+    public SubscriptionEntity updateSubscription(SubscriptionEntity subscription, String frequency, String remarks, HashMap<ProductEntity, Integer> productQuantity, List<ProductEntity> products, AddressEntity address, boolean isActive) {
+        subscription.setAddress(address);
+        subscription.setCustomer(customer);
+        subscription.setFrequency(frequency);
+        subscription.setIsActive(isActive);
+        subscription.setProductQuantity(productQuantity);
+        subscription.setProducts(products);
+        subscription.setRemarks(remarks);
+        em.merge(subscription);
+        em.flush();
+        return subscription;
+    }
+
+    @Override
+    public SubscriptionEntity AddSubscription(CustomerEntity customer, String frequency, String remarks, HashMap<ProductEntity, Integer> productQuantity, List<ProductEntity> products, AddressEntity address) {
+        subscription = new SubscriptionEntity();
+        subscription.setAddress(address);
+        subscription.setCustomer(customer);
+        subscription.setFrequency(frequency);
+        subscription.setIsActive(true);
+        subscription.setProductQuantity(productQuantity);
+        subscription.setProducts(products);
+        subscription.setRemarks(remarks);
+        em.persist(subscription);
+        subscriptions = customer.getSubscriptions();
+        subscriptions.add(subscription);
+        customer.setSubscriptions(subscriptions);
+        em.merge(customer);
+        em.flush();
+        return subscription;
+    }
+
+    @Override
+    public List<SubscriptionEntity> getSubscriptionList(CustomerEntity customer) {
+        return customer.getSubscriptions();
+    }
+
+    @Override
+    public SubscriptionEntity getSubscription(Long subscriptionId) {
+        Query query = em.createQuery("SELECT s FROM SubscriptionEntity s WHERE s.id=:id");
+        query.setParameter("id", subscriptionId);
+        subscription = (SubscriptionEntity) query.getSingleResult();
+        return subscription;
     }
 }

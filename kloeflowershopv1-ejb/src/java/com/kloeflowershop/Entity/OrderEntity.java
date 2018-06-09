@@ -35,6 +35,8 @@ public class OrderEntity implements Serializable {
     private Date dateTimeOfOrder;
     private boolean isSubscription; 
     private String remark;
+    private HashMap<ProductEntity, Integer> productQuantity = new HashMap<ProductEntity, Integer>();
+    
     @OneToOne(cascade={CascadeType.ALL})
     private AddressEntity address;
     @OneToOne(cascade={CascadeType.ALL})
@@ -44,7 +46,27 @@ public class OrderEntity implements Serializable {
     @ManyToMany(cascade={CascadeType.ALL})
     @JoinTable(name="PRODUCT_ORDER")
     private List<ProductEntity> products = new ArrayList<ProductEntity>();
-    private HashMap<ProductEntity, Integer> productQuantity = new HashMap<ProductEntity, Integer>();
+    @OneToOne(cascade = {CascadeType.ALL})
+    private PaymentEntity payment;
+
+    /**
+     * Get the value of payment
+     *
+     * @return the value of payment
+     */
+    public PaymentEntity getPayment() {
+        return payment;
+    }
+
+    /**
+     * Set the value of payment
+     *
+     * @param payment new value of payment
+     */
+    public void setPayment(PaymentEntity payment) {
+        this.payment = payment;
+    }
+
 
     /**
      * Get the value of productQuantity

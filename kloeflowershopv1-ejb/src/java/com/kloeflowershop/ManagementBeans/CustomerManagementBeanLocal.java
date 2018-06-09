@@ -5,7 +5,11 @@
  */
 package com.kloeflowershop.ManagementBeans;
 
+import com.kloeflowershop.Entity.AddressEntity;
 import com.kloeflowershop.Entity.CustomerEntity;
+import com.kloeflowershop.Entity.ProductEntity;
+import com.kloeflowershop.Entity.SubscriptionEntity;
+import java.util.HashMap;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -16,13 +20,24 @@ import javax.ejb.Local;
 @Local
 public interface CustomerManagementBeanLocal {
     
-    public boolean loginCustomer(String email, String attemptedPassword);
-    public boolean addCustomer(String email, String name, Long primaryAddressId, int mobileNumber, 
+    public CustomerEntity loginCustomer(String email, String attemptedPassword);
+    public CustomerEntity addCustomer(String email, String name, Long primaryAddressId, int mobileNumber, 
             String gender, String passwordString);
-    public boolean updateCustomerInfo(Long customerId, String email, String name, Long primaryAddressId, 
-            int mobileNumber, String gender);
-    public boolean updateCustomerPassword(Long customerId, String oldPasswordString, String newPasswordString);
-    public CustomerEntity getSingleCustomer(Long customerId);
+    public CustomerEntity updateCustomerInfo(CustomerEntity customer, String email, String name, Long primaryAddressId, int mobileNumber, String gender);
+    public boolean updateCustomerPassword(CustomerEntity customer, String oldPasswordString, String newPasswordString);
+    public CustomerEntity getCustomer(Long customerId);
     public List<CustomerEntity> getCustomerList();
-    
+
+    List<AddressEntity> getAddressList(CustomerEntity customer);
+    AddressEntity getPrimaryAddress(CustomerEntity customer);
+    AddressEntity getAddress(Long addressId);
+    AddressEntity addAddress(String country, String area, String city, String streetName, String extraDetails, boolean isPrimary, CustomerEntity customer);
+    AddressEntity setPrimaryAddress(AddressEntity address, CustomerEntity customer);
+    SubscriptionEntity AddSubscription(CustomerEntity customer, String frequency, String remarks, HashMap<ProductEntity, Integer> productQuantity, List<ProductEntity> products, AddressEntity address);
+
+    List<SubscriptionEntity> getSubscriptionList(CustomerEntity customer);
+
+    SubscriptionEntity getSubscription(Long subscriptionId);
+
+    SubscriptionEntity updateSubscription(SubscriptionEntity subscription, String frequency, String remarks, HashMap<ProductEntity, Integer> productQuantity, List<ProductEntity> products, AddressEntity address, boolean isActive);
 }

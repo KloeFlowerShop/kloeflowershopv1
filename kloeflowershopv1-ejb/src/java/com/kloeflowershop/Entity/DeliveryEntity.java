@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 
@@ -30,6 +31,7 @@ public class DeliveryEntity implements Serializable {
     private Date dateTime;
     private String assignedIC;
     private String assignedICContact;
+    
     @OneToOne(cascade = {CascadeType.ALL})
     private OrderEntity order;
 
