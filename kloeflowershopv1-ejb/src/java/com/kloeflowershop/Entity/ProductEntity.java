@@ -6,6 +6,7 @@
 package com.kloeflowershop.Entity;
 
 import java.io.Serializable;
+import java.sql.Blob;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,24 +27,44 @@ public class ProductEntity implements Serializable {
     private double cost;
     private String name;
     private String description;
-    private String size;
+    private String bundleSize;
+    private Blob imageBytes;
 
     /**
-     * Get the value of size
+     * Get the value of imageBytes
      *
-     * @return the value of size
+     * @return the value of imageBytes
      */
-    public String getSize() {
-        return size;
+    public Blob getImageBytes() {
+        return imageBytes;
     }
 
     /**
-     * Set the value of size
+     * Set the value of imageBytes
      *
-     * @param size new value of size
+     * @param imageBytes new value of imageBytes
      */
-    public void setSize(String size) {
-        this.size = size;
+    public void setImageBytes(Blob imageBytes) {
+        this.imageBytes = imageBytes;
+    }
+
+
+    /**
+     * Get the value of bundleSize
+     *
+     * @return the value of bundleSize
+     */
+    public String getBundleSize() {
+        return bundleSize;
+    }
+
+    /**
+     * Set the value of bundleSize
+     *
+     * @param bundleSize new value of bundleSize
+     */
+    public void setBundleSize(String bundleSize) {
+        this.bundleSize = bundleSize;
     }
 
 

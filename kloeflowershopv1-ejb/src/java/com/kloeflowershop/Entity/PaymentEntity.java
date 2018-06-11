@@ -6,7 +6,7 @@
 package com.kloeflowershop.Entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,15 +24,14 @@ public class PaymentEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private boolean isPaid = false;
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date dateTime;
+    private LocalDateTime dateTime;
 
     /**
      * Get the value of dateTime
      *
      * @return the value of dateTime
      */
-    public Date getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
@@ -41,7 +40,7 @@ public class PaymentEntity implements Serializable {
      *
      * @param dateTime new value of dateTime
      */
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 
