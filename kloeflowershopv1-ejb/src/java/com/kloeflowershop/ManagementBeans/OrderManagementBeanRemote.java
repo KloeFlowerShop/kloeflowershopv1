@@ -5,13 +5,10 @@
  */
 package com.kloeflowershop.ManagementBeans;
 
-import javax.ejb.Local;
-
 /**
  *
  * @author Terence
  */
-@Local
-public interface PaymentManagementBeanLocal {
+public interface OrderManagementBeanRemote {
     
 }

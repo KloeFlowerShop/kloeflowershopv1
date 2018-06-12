@@ -6,11 +6,15 @@
 package com.kloeflowershop.Entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
 
 /**
  *
@@ -23,37 +27,38 @@ public class DeliveryEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDateTime deliveryDateTime;
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dateTime;
     private String assignedIC;
-    private int assignedICContact;
-    private boolean isDelivered = false;
+    private String assignedICContact;
+    
+    @OneToOne(cascade = {CascadeType.ALL})
+    private OrderEntity order;
 
     /**
-     * Get the value of isDelivered
+     * Get the value of order
      *
-     * @return the value of isDelivered
+     * @return the value of order
      */
-    public boolean isIsDelivered() {
-        return isDelivered;
+    public OrderEntity getOrder() {
+        return order;
     }
 
     /**
-     * Set the value of isDelivered
+     * Set the value of order
      *
-     * @param isDelivered new value of isDelivered
+     * @param order new value of order
      */
-    public void setIsDelivered(boolean isDelivered) {
-        this.isDelivered = isDelivered;
+    public void setOrder(OrderEntity order) {
+        this.order = order;
     }
-
-
 
     /**
      * Get the value of assignedICContact
      *
      * @return the value of assignedICContact
      */
-    public int getAssignedICContact() {
+    public String getAssignedICContact() {
         return assignedICContact;
     }
 
@@ -62,7 +67,7 @@ public class DeliveryEntity implements Serializable {
      *
      * @param assignedICContact new value of assignedICContact
      */
-    public void setAssignedICContact(int assignedICContact) {
+    public void setAssignedICContact(String assignedICContact) {
         this.assignedICContact = assignedICContact;
     }
 
@@ -92,8 +97,8 @@ public class DeliveryEntity implements Serializable {
      *
      * @return the value of Datetime
      */
-    public LocalDateTime getDeliveryDateTime() {
-        return deliveryDateTime;
+    public Date getDatetime() {
+        return dateTime;
     }
 
     /**
@@ -101,8 +106,8 @@ public class DeliveryEntity implements Serializable {
      *
      * @param Datetime new value of Datetime
      */
-    public void setDeliveryDateTime(LocalDateTime Datetime) {
-        this.deliveryDateTime = Datetime;
+    public void setDatetime(Date Datetime) {
+        this.dateTime = Datetime;
     }
 
     public Long getId() {

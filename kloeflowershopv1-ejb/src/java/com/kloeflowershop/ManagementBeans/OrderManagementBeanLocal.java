@@ -12,6 +12,6 @@ import javax.ejb.Local;
  * @author Terence
  */
 @Local
-public interface ProductManagementBeanLocal {
+public interface OrderManagementBeanLocal {
     
 }

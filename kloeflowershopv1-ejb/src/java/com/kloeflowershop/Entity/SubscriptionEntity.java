@@ -31,7 +31,7 @@ public class SubscriptionEntity implements Serializable {
     private Long id;
     //Weekly, Fortnightly, Monthly only
     private String frequency;
-    private boolean isDeleted = false;
+    private boolean isActive = true;
     private String remarks;
     private HashMap<ProductEntity, Integer> productQuantity = new HashMap<ProductEntity, Integer>();
     
@@ -104,21 +104,21 @@ public class SubscriptionEntity implements Serializable {
 
     
     /**
-     * Get the value of isDeleted
+     * Get the value of isActive
      *
-     * @return the value of isDeleted
+     * @return the value of isActive
      */
-    public boolean isIsDeleted() {
-        return isDeleted;
+    public boolean isIsActive() {
+        return isActive;
     }
 
     /**
-     * Set the value of isDeleted
+     * Set the value of isActive
      *
-     * @param isDeleted new value of isDeleted
+     * @param isActive new value of isActive
      */
-    public void setIsDeleted(boolean isDeleted) {
-        this.isDeleted = isDeleted;
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
     
 

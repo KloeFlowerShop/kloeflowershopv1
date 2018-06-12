@@ -7,7 +7,6 @@
 package com.kloeflowershop.Entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,9 +18,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
 
 /**
  *
@@ -35,10 +32,10 @@ public class OrderEntity implements Serializable {
     private Long id;
     private String recipientName;
     private int recipientContact;
-    private LocalDateTime dateTime;
-    private String remarks;
+    private Date dateTimeOfOrder;
+    private boolean isSubscription; 
+    private String remark;
     private HashMap<ProductEntity, Integer> productQuantity = new HashMap<ProductEntity, Integer>();
-    private boolean isDeleted = false;
     
     @OneToOne(cascade={CascadeType.ALL})
     private AddressEntity address;
@@ -51,46 +48,6 @@ public class OrderEntity implements Serializable {
     private List<ProductEntity> products = new ArrayList<ProductEntity>();
     @OneToOne(cascade = {CascadeType.ALL})
     private PaymentEntity payment;
-    @ManyToOne(cascade = {CascadeType.ALL})
-    private CustomerEntity customer;
-
-    /**
-     * Get the value of customer
-     *
-     * @return the value of customer
-     */
-    public CustomerEntity getCustomer() {
-        return customer;
-    }
-
-    /**
-     * Set the value of customer
-     *
-     * @param customer new value of customer
-     */
-    public void setCustomer(CustomerEntity customer) {
-        this.customer = customer;
-    }
-
-    /**
-     * Get the value of isDeleted
-     *
-     * @return the value of isDeleted
-     */
-    public boolean isIsDeleted() {
-        return isDeleted;
-    }
-
-
-    /**
-     * Set the value of isDeleted
-     *
-     * @param isDeleted new value of isDeleted
-     */
-    public void setIsDeleted(boolean isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
 
     /**
      * Get the value of payment
@@ -159,12 +116,12 @@ public class OrderEntity implements Serializable {
 
     
      /**
-     * Set the value of remarks
+     * Set the value of remark
      *
-     * @param remarks new value of remarks
+     * @param remark new value of remark
      */
-    public void setRemarks(String remarks) {
-        this.remarks = remarks;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
     
 
@@ -186,12 +143,12 @@ public class OrderEntity implements Serializable {
         this.delivery = delivery;
     }
 /**
-     * Get the value of remarks
+     * Get the value of remark
      *
-     * @return the value of remarks
+     * @return the value of remark
      */
-    public String getRemarks() {
-        return remarks;
+    public String getRemark() {
+        return remark;
     }
     
 
@@ -214,22 +171,44 @@ public class OrderEntity implements Serializable {
     }
 
 
+   
+   
+
     /**
-     * Get the value of dateTime
+     * Get the value of isSubscription
      *
-     * @return the value of dateTime
+     * @return the value of isSubscription
      */
-    public LocalDateTime getDateTimeOfOrder() {
-        return dateTime;
+    public boolean isIsSubscription() {
+        return isSubscription;
     }
 
     /**
-     * Set the value of dateTime
+     * Set the value of isSubscription
      *
-     * @param dateTimeOfOrder new value of dateTime
+     * @param isSubscription new value of isSubscription
      */
-    public void setDateTimeOfOrder(LocalDateTime dateTimeOfOrder) {
-        this.dateTime = dateTimeOfOrder;
+    public void setIsSubscription(boolean isSubscription) {
+        this.isSubscription = isSubscription;
+    }
+
+
+    /**
+     * Get the value of dateTimeOfOrder
+     *
+     * @return the value of dateTimeOfOrder
+     */
+    public Date getDateTimeOfOrder() {
+        return dateTimeOfOrder;
+    }
+
+    /**
+     * Set the value of dateTimeOfOrder
+     *
+     * @param dateTimeOfOrder new value of dateTimeOfOrder
+     */
+    public void setDateTimeOfOrder(Date dateTimeOfOrder) {
+        this.dateTimeOfOrder = dateTimeOfOrder;
     }
 
 
