@@ -5,23 +5,20 @@
  */
 package com.kloeflowershop.ManagementBeans;
 
-import com.kloeflowershop.Entity.OrderEntity;
+import com.kloeflowershop.Entity.PaymentEntity;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 /**
  *
  * @author Terence
  */
 @Stateless
-public class OrderManagementBean implements OrderManagementBeanLocal, OrderManagementBeanRemote {
+public class PaymentManagementBean implements PaymentManagementBeanLocal {
 
-    @PersistenceContext
-    EntityManager em;
-
-    OrderEntity order;
-    
+    PaymentEntity payment;
+    List<PaymentEntity> paymentList = new ArrayList<PaymentEntity>();
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 }

@@ -7,11 +7,17 @@ package com.kloeflowershop.ManagementBeans;
 
 import com.kloeflowershop.Entity.AddressEntity;
 import com.kloeflowershop.Entity.CustomerEntity;
+import com.kloeflowershop.Entity.OrderEntity;
 import com.kloeflowershop.Entity.ProductEntity;
 import com.kloeflowershop.Entity.SubscriptionEntity;
 import com.kloeflowershop.Misc.PasswordEncryptionService;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -37,7 +43,11 @@ public class CustomerManagementBean implements CustomerManagementBeanLocal, Cust
     List<AddressEntity> addressList;
     SubscriptionEntity subscription;
     List<SubscriptionEntity> subscriptions;
+    OrderEntity order;
+    List<OrderEntity> orders;
     PasswordEncryptionService pes = new PasswordEncryptionService();
+    ZoneId zoneId = ZoneId.of("Asia/Shanghai");
+    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
     @Override
     public CustomerEntity loginCustomer(String email, String attemptedPassword) {
@@ -179,11 +189,11 @@ public class CustomerManagementBean implements CustomerManagementBeanLocal, Cust
     }
 
     @Override
-    public SubscriptionEntity updateSubscription(SubscriptionEntity subscription, String frequency, String remarks, HashMap<ProductEntity, Integer> productQuantity, List<ProductEntity> products, AddressEntity address, boolean isActive) {
+    public SubscriptionEntity updateSubscription(SubscriptionEntity subscription, String frequency, String remarks, HashMap<ProductEntity, Integer> productQuantity, List<ProductEntity> products, AddressEntity address, boolean isDeleted) {
         subscription.setAddress(address);
         subscription.setCustomer(customer);
         subscription.setFrequency(frequency);
-        subscription.setIsActive(isActive);
+        subscription.setIsDeleted(isDeleted);
         subscription.setProductQuantity(productQuantity);
         subscription.setProducts(products);
         subscription.setRemarks(remarks);
@@ -198,7 +208,7 @@ public class CustomerManagementBean implements CustomerManagementBeanLocal, Cust
         subscription.setAddress(address);
         subscription.setCustomer(customer);
         subscription.setFrequency(frequency);
-        subscription.setIsActive(true);
+        subscription.setIsDeleted(false);
         subscription.setProductQuantity(productQuantity);
         subscription.setProducts(products);
         subscription.setRemarks(remarks);
@@ -222,5 +232,52 @@ public class CustomerManagementBean implements CustomerManagementBeanLocal, Cust
         query.setParameter("id", subscriptionId);
         subscription = (SubscriptionEntity) query.getSingleResult();
         return subscription;
+    }
+
+    @Override
+    public OrderEntity addOrder(CustomerEntity customer, String recipientName, int recipientContact, String remarks, HashMap<ProductEntity, Integer> productQuantity, AddressEntity address, Date deliveryDateTime, List<ProductEntity> products) {
+        order = new OrderEntity();
+        order.setAddress(address);
+        order.setDateTimeOfOrder(LocalDateTime.now(zoneId));
+        order.setIsDeleted(false);
+        order.setProductQuantity(productQuantity);
+        order.setProducts(products);
+        order.setRecipientContact(recipientContact);
+        order.setRecipientName(recipientName);
+        order.setRemarks(remarks);
+        em.persist(order);
+        em.flush();
+        return order;
+    }
+
+    @Override
+    public OrderEntity updateOrder(String recipientName, int recipientContact, String remarks, HashMap<ProductEntity, Integer> productQuantity, boolean isDeleted, AddressEntity address, List<ProductEntity> products, OrderEntity order) {
+        order.setAddress(address);
+        order.setDateTimeOfOrder(LocalDateTime.now(zoneId));
+        order.setIsDeleted(isDeleted);
+        order.setProductQuantity(productQuantity);
+        order.setProducts(products);
+        order.setRecipientContact(recipientContact);
+        order.setRecipientName(recipientName);
+        order.setRemarks(remarks);
+        em.merge(order);
+        em.flush();
+        return order;
+    }
+
+    @Override
+    public OrderEntity getOrder(Long orderId) {
+        Query query = em.createQuery("SELECT o FROM OrderEntity o WHERE o.id=:id");
+        query.setParameter("id", orderId);
+        order = (OrderEntity)query.getSingleResult();
+        return order;
+    }
+
+    @Override
+    public List<OrderEntity> getOrderList(CustomerEntity customer) {
+        Query query = em.createQuery("SELECT o FROM OrderEntity o WHERE o.customer=:customer");
+        query.setParameter("customer", customer);
+        orders = query.getResultList();
+        return orders;
     }
 }

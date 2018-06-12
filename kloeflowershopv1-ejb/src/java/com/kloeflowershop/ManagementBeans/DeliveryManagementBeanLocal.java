@@ -5,6 +5,9 @@
  */
 package com.kloeflowershop.ManagementBeans;
 
+import com.kloeflowershop.Entity.DeliveryEntity;
+import com.kloeflowershop.Entity.OrderEntity;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -13,5 +16,15 @@ import javax.ejb.Local;
  */
 @Local
 public interface DeliveryManagementBeanLocal {
+
+    DeliveryEntity addDelivery(String lastModifiedDateTimeString, OrderEntity order);
+
+    DeliveryEntity updateDelivery(String lastModifiedDateTimeString, OrderEntity order, DeliveryEntity delivery);
+
+    List<DeliveryEntity> getDeliveries(int assignedICContact);
+
+    DeliveryEntity getDelivery(Long deliveryId);
+
+    DeliveryEntity updateDelivery(boolean isDelivered, DeliveryEntity delivery, int assignedICContact, String assignedIC);
     
 }
