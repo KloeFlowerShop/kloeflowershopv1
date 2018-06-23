@@ -32,9 +32,9 @@ import javax.persistence.Query;
  * @author Terence
  */
 @Stateless
-public class CustomerManagementBean implements CustomerManagementBeanLocal, CustomerManagementBeanRemote {
+public class CustomerManagementBean implements CustomerManagementBeanLocal {
 
-    @PersistenceContext
+    @PersistenceContext()
     EntityManager em;
 
     CustomerEntity customer;
@@ -49,6 +49,9 @@ public class CustomerManagementBean implements CustomerManagementBeanLocal, Cust
     ZoneId zoneId = ZoneId.of("Asia/Shanghai");
     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
+    public CustomerManagementBean() {
+    }
+    
     @Override
     public CustomerEntity loginCustomer(String email, String attemptedPassword) {
         Query query = em.createQuery("SELECT c FROM CustomerEntity c WHERE c.email=:email");
@@ -69,14 +72,14 @@ public class CustomerManagementBean implements CustomerManagementBeanLocal, Cust
     }
 
     @Override
-    public CustomerEntity addCustomer(String email, String name, Long primaryAddressId, int mobileNumber,
-            String gender, String passwordString) {
+    public CustomerEntity addCustomer(String email, String name, int mobileNumber, String gender, String passwordString, String country, String area, String city, String streetName, String extraDetails) {
+//        System.out.println("AC Start");
         customer = new CustomerEntity();
         customer.setEmail(email);
         customer.setName(name);
         customer.setGender(gender);
         customer.setMobileNumber(mobileNumber);
-        customer.setPrimaryAddressID(primaryAddressId);
+//        System.out.println("General Set");
         byte[] passwordSalt = null;
         byte[] password = null;
         try {
@@ -88,6 +91,10 @@ public class CustomerManagementBean implements CustomerManagementBeanLocal, Cust
         customer.setPasswordSalt(passwordSalt);
         customer.setPassword(password);
         em.persist(customer);
+        address = addAddress(country, area, city, streetName, extraDetails, true, customer);
+        em.merge(customer);
+        em.persist(address);
+//        System.out.println("Hello, I am your customer " + customer.getName());
         em.flush();
         return customer;
     }
@@ -134,7 +141,7 @@ public class CustomerManagementBean implements CustomerManagementBeanLocal, Cust
 
     @Override
     public List<CustomerEntity> getCustomerList() {
-        Query query = em.createQuery("SELECT * FROM CustomerEntity");
+        Query query = em.createQuery("SELECT c FROM CustomerEntity c");
         customerList = query.getResultList();
         return customerList;
     }
@@ -171,10 +178,12 @@ public class CustomerManagementBean implements CustomerManagementBeanLocal, Cust
         addressList = customer.getAddressList();
         addressList.add(address);
         customer.setAddressList(addressList);
+        em.persist(address);
+        em.merge(customer);
+        em.flush();
         if (isPrimary) {
             customer.setPrimaryAddressID(address.getId());
         }
-        em.persist(address);
         em.merge(customer);
         em.flush();
         return address;

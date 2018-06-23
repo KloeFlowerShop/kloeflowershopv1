@@ -21,4 +21,7 @@ public class PaymentManagementBean implements PaymentManagementBeanLocal {
     List<PaymentEntity> paymentList = new ArrayList<PaymentEntity>();
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+    
+    public PaymentManagementBean() {
+    }
 }

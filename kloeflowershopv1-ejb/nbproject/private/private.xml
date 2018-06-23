@@ -2,6 +2,16 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/User/Desktop/Personal/KLOE_Flower_Shop/kloeflowershopv1/kloeflowershopv1-ejb/src/java/com/kloeflowershop/Misc/PasswordEncryptionService.java</file>
+            <file>file:/C:/Users/User/Desktop/Personal/KLOE_Flower_Shop/kloeflowershopv1/kloeflowershopv1-ejb/src/java/com/kloeflowershop/ManagementBeans/ProductManagementBeanLocal.java</file>
+            <file>file:/C:/Users/User/Desktop/Personal/KLOE_Flower_Shop/kloeflowershopv1/kloeflowershopv1-ejb/src/java/com/kloeflowershop/Entity/ProductEntity.java</file>
+            <file>file:/C:/Users/User/Desktop/Personal/KLOE_Flower_Shop/kloeflowershopv1/kloeflowershopv1-ejb/src/conf/persistence.xml</file>
+            <file>file:/C:/Users/User/Desktop/Personal/KLOE_Flower_Shop/kloeflowershopv1/kloeflowershopv1-ejb/src/java/com/kloeflowershop/ManagementBeans/PaymentManagementBean.java</file>
+            <file>file:/C:/Users/User/Desktop/Personal/KLOE_Flower_Shop/kloeflowershopv1/kloeflowershopv1-ejb/src/java/com/kloeflowershop/ManagementBeans/CustomerManagementBeanLocal.java</file>
+            <file>file:/C:/Users/User/Desktop/Personal/KLOE_Flower_Shop/kloeflowershopv1/kloeflowershopv1-ejb/src/java/com/kloeflowershop/ManagementBeans/ProductManagementBean.java</file>
+            <file>file:/C:/Users/User/Desktop/Personal/KLOE_Flower_Shop/kloeflowershopv1/kloeflowershopv1-ejb/src/java/com/kloeflowershop/ManagementBeans/DeliveryManagementBean.java</file>
+            <file>file:/C:/Users/User/Desktop/Personal/KLOE_Flower_Shop/kloeflowershopv1/kloeflowershopv1-ejb/src/java/com/kloeflowershop/ManagementBeans/CustomerManagementBean.java</file>
+        </group>
     </open-files>
 </project-private>

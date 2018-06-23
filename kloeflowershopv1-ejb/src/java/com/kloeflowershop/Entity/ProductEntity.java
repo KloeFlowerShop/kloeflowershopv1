@@ -29,6 +29,26 @@ public class ProductEntity implements Serializable {
     private String description;
     private String bundleSize;
     private Blob imageBytes;
+    private boolean isSubscriptionProduct = false;
+
+    /**
+     * Get the value of isSubscriptionProduct
+     *
+     * @return the value of isSubscriptionProduct
+     */
+    public boolean isIsSubscriptionProduct() {
+        return isSubscriptionProduct;
+    }
+
+    /**
+     * Set the value of isSubscriptionProduct
+     *
+     * @param isSubscriptionProduct new value of isSubscriptionProduct
+     */
+    public void setIsSubscriptionProduct(boolean isSubscriptionProduct) {
+        this.isSubscriptionProduct = isSubscriptionProduct;
+    }
+
 
     /**
      * Get the value of imageBytes

@@ -13,18 +13,17 @@ import com.kloeflowershop.Entity.SubscriptionEntity;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import javax.ejb.Local;
+import javax.ejb.Remote;
 
 /**
  *
  * @author Terence
  */
-@Local
+@Remote
 public interface CustomerManagementBeanLocal {
     
     public CustomerEntity loginCustomer(String email, String attemptedPassword);
-    public CustomerEntity addCustomer(String email, String name, Long primaryAddressId, int mobileNumber, 
-            String gender, String passwordString);
+    public CustomerEntity addCustomer(String email, String name, int mobileNumber, String gender, String passwordString, String country, String area, String city, String streetName, String extraDetails);
     public CustomerEntity updateCustomerInfo(CustomerEntity customer, String email, String name, Long primaryAddressId, int mobileNumber, String gender);
     public boolean updateCustomerPassword(CustomerEntity customer, String oldPasswordString, String newPasswordString);
     public CustomerEntity getCustomer(Long customerId);
