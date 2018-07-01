@@ -34,6 +34,10 @@ public class DeliveryManagementBean implements DeliveryManagementBeanLocal, Deli
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+    
+    public DeliveryManagementBean() {
+    }
+    
     @Override
     public DeliveryEntity addDelivery(String deliveryDateTime, OrderEntity order) {
         if (order.getAddress().getCountry().equalsIgnoreCase("Singapore")) {
