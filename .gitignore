@@ -6,3 +6,5 @@ build.xml
 build/
 dist/
 /Test/nbproject/private/
+*.properties
+kloeflowershopv1-ejb/src/conf/META-INF/glassfish-resources.xml
